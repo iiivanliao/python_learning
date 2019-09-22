@@ -10,4 +10,5 @@ def is_palindrome(n):
     return final_true
 
 
-print(is_palindrome(909))
+output = filter(is_palindrome, range(1, 100))
+print('1~100:', list(output))
