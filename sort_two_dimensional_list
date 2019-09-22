@@ -9,7 +9,7 @@ sorted_by_score = sorted(name_score, key = itemgetter(1))
 print(sorted_by_score)
 
 
-# 用lambda匿名函数
+# try another way - use lambda
 
 sorted_by_name = sorted(name_score, key = lambda x: x[0])
 print(sorted_by_name)
