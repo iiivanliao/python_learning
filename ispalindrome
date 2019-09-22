@@ -1,0 +1,13 @@
+def is_palindrome(n):
+    str1 = str(n)
+    lenth = (len(str1) - 1) / 2
+    l = 0
+    final_true = True
+    while l < lenth + 1:
+        tt = (str1[l] == str1[-(l + 1)])
+        l += 1
+        final_true = final_true and tt
+    return final_true
+
+
+print(is_palindrome(909))
