@@ -1,0 +1,20 @@
+def createCounter():
+
+    def f():
+        x = 0
+        while True:
+            x += 1
+            yield x
+
+    it = f()
+    def counter():
+        num = next(it)
+        return num
+    return counter
+
+counterstart = createCounter()
+while True:
+    nums = counterstart()
+    print(nums)
+    if nums> 100:
+        break
