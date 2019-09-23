@@ -1,0 +1,18 @@
+import functools
+
+def log(text1, text2):
+    def decorator(fn):
+        @functools.wraps(fn)
+        def wrapper(*args, **kwargs):
+            print('%s is going to %s' %(fn.__name__, text1))
+            ff = fn(*args, **kwargs)
+            print(ff)
+            print('%s is going to %s' %(fn.__name__, text2))
+        return wrapper
+    return decorator
+
+@log('begin call', 'end call')
+def pluss(x, y):
+    return x + y
+
+print(pluss(1, 10000))
