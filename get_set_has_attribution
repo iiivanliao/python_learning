@@ -1,0 +1,14 @@
+class MyObject(object):
+    def __init__(self):
+        self.x = 10
+
+    def power(self):
+        return self.x * self.x
+
+m = MyObject()
+
+print(hasattr(m, 'x'))
+print(hasattr(m, 'y'))
+setattr(m, 'y', 12)
+print(hasattr(m , 'y'))
+print(getattr(m, 'y'))
