@@ -1,0 +1,21 @@
+class Animal(object):
+    def __init__(self):
+        pass
+    def run(self):
+        print('Animals are running')
+
+class Dog(Animal):
+    def run(self):
+        print('Dogs are running')
+
+class Cat(Animal):
+    def run(self):
+        print('Cats are running')
+
+def rr(animal):
+    animal.run()
+
+
+rr(Animal())
+rr(Cat())
+rr(Dog())
