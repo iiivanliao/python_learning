@@ -1,0 +1,31 @@
+#           1
+#          / \
+#         1   1
+#        / \ / \
+#       1   2   1
+#      / \ / \ / \
+#     1   3   3   1
+#    / \ / \ / \ / \
+#   1   4   6   4   1
+#  / \ / \ / \ / \ / \
+# 1   5   10  10  5   1
+
+def triangles(n):
+    L = [1, 1]
+    for i in range(1, n+1):
+        if i == 1:
+            yield [1]
+        elif i == 2:
+            yield [1, 1]
+        else:
+            emptyList = []
+            for j in range(0, len(L)-1):
+                emptyList.append(L[j] + L[j+1])
+            L = L[:1] + emptyList + L[-1:]
+            yield L
+
+a = triangles(10)
+print(next(a))
+print(next(a))
+print(next(a))
+print(next(a))
