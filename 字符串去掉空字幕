@@ -1,0 +1,5 @@
+from functools import reduce
+def is_empty(string):
+    return reduce(lambda x, y: x + y, filter(lambda x: x != ' ', string))
+
+print(is_empty(' fadfaf  adfad '))
