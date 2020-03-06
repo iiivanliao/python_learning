@@ -1,0 +1,29 @@
+def odd_number():
+    n = 1
+    while True:
+        n += 2
+        yield n
+
+
+def not_diviable(n):
+    return lambda x: x % n > 0
+
+
+def is_prime(max):
+    yield 2
+    os = odd_number()
+    while True:
+        it = next(os)
+        if it > max:
+            break
+        yield it
+        os = filter(not_diviable(it), os)
+
+
+for i in is_prime(100):
+    if i < 100:
+        print(i)
+
+
+his = is_prime(100)
+print(list(his))
