@@ -1,0 +1,54 @@
+class Person(object):
+    def __init__(self, name, gender):
+        self.name = name
+        self.__gender = gender[0].upper() + gender[1:].lower()
+
+
+    def run(self):
+        print('Person is running.')
+
+
+class Student(Person):
+    def __init__(self, name, gender):
+        self.name = name
+        self.__gender = gender[0].upper() + gender[1:].lower()
+
+
+    def run(self):
+        print('Student is running.')
+
+
+    def get_gender(self):
+        print(self.__gender)
+
+
+    def set_gender(self, gender):
+        if not isinstance(gender, str):
+            raise TypeError('It should be an string.')
+        else:
+            if gender.lower() not in ('male', 'female'):
+                raise ValueError('It should be Male or Female.')
+            else:
+                self.__gender = gender[0].upper() + gender[1:].lower()
+
+
+class HighStudent(Student):
+    def __init__(self, name, gender):
+        self.name = name
+        self.__gender = gender[0].upper() + gender[1:].lower()
+
+
+    def run(self):
+        print('HighStudent is running.')
+
+
+def running(some):
+    some.run()
+
+
+person_sinead = Person('Sinead', 'female')
+student_ivan = Student('ivan', 'male')
+highstudent_wendy = HighStudent('Wendy', 'female')
+running(person_sinead)
+running(student_ivan)
+running(highstudent_wendy)
