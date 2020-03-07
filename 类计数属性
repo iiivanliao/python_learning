@@ -1,0 +1,14 @@
+class Student(object):
+    count = 0
+    def __init__(self, name, gender):
+        self.name = name
+        self.gender = gender
+        self.__set_count()
+
+    def __set_count(self):
+        Student.count += 1
+
+
+ivan = Student('ivan', 'female')
+wendy = Student('wendy', 'female')
+print(Student.count)
