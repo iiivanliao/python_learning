@@ -1,0 +1,17 @@
+import functools
+import time
+
+def log(text):
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            print(text, 'Now is', time.strftime('%Y-%m-%d, %H:%M:%S', time.localtime(time.time())))
+            return func(*args, **kwargs)
+        return wrapper
+    return decorator
+
+@log('Ivan')
+def cals(x, y):
+    print(x ** y)
+
+cals(2, 8)
