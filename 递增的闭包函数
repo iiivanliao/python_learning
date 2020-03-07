@@ -1,0 +1,15 @@
+def createCounter():
+    def Counter():
+        n = 1
+        while True:
+            yield n
+            n += 1
+
+    it = Counter()
+    def realCounter():
+        return next(it)
+    return realCounter
+
+
+counter1 = createCounter()
+print(counter1(), counter1(), counter1())
