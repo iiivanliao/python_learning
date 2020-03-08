@@ -1,0 +1,27 @@
+from types import MethodType
+
+
+class Student(object):
+    def __init__(self):
+        pass
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, name):
+        if not isinstance(name, str):
+            raise TypeError('It should be a str')
+        self._name = name
+
+    @name.deleter
+    def name(self):
+        self.name = ' '
+
+
+ivan = Student()
+ivan.name = 'ivan'
+print(ivan.name)
+del ivan.name
+print('Now ivan\'s name is: %s' % ivan.name)
