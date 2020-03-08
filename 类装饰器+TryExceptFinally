@@ -1,0 +1,38 @@
+class Screen(object):
+
+    @property
+    def width(self):
+        return self._width
+
+    @width.setter
+    def width(self, width):
+        self._width = width
+
+    @property
+    def height(self):
+        return self._height
+
+    @height.setter
+    def height(self, height):
+        self._height = height
+
+    @property
+    def resolution(self):
+        return self._width * self._height
+
+        # @resolution.setter
+        # def resolution(self, resolution):
+        #     self._resolution = resolution
+
+
+it = Screen()
+it.width = 1920
+it.height = 1080
+print(it.resolution)
+
+try:
+    it.resolution = 123123
+except AttributeError:
+    print('Editing Resolution is NOT allowed.')
+finally:
+    print(it.__dict__)
