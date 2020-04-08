@@ -1,0 +1,32 @@
+import turtle as t
+
+
+def xuehua(long, n):
+    if n == 0:
+        t.fd(long)
+    else:
+        for i in [0, 60, -120, 60]:
+            t.left(i)
+            xuehua(long / 3, n - 1)
+
+
+def more_xuehua(long, n, m):
+    for i in range(m):
+        xuehua(long, n)
+        t.right(360 / m)
+
+
+def main():
+    t.setup(1000, 900, 0, 0)
+    t.penup()
+    t.goto(-300, 300)
+    t.pendown()
+    t.pencolor("pink")
+    t.pensize(5)
+    t.speed(10)
+    more_xuehua(200, 3, 6)
+    t.hideturtle()
+    t.done()
+
+
+main()
