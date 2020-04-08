@@ -1,0 +1,73 @@
+import time
+import turtle as t
+
+
+def draw_gap(n):
+    t.penup()
+    t.forward(n)
+
+
+def draw_line(draw = True, gap = True):
+    draw_gap(10) if gap else None
+    t.pendown() if draw else t.penup()
+    t.fd(50)
+    draw_gap(10) if gap else None
+    t.right(90)
+
+def draw_char(content, font_type = "Arial", font_size = 15):
+    t.write(content, font = (font_type, font_size))
+
+
+def draw_digal(digtal):
+    if isinstance(digtal, int):
+        draw_line() if digtal in [2, 3, 4, 5, 6, 8, 9] else draw_line(False)
+        draw_line() if digtal in [0, 1, 3, 4, 5, 6, 7, 8, 9] else draw_line(False)
+        draw_line() if digtal in [0, 2, 3, 5, 6, 8, 9] else draw_line(False)
+        draw_line() if digtal in [0, 2, 6, 8] else draw_line(False)
+        t.left(90)
+        draw_line() if digtal in [0, 4, 5, 6, 8, 9] else draw_line(False)
+        draw_line() if digtal in [0, 2, 3, 5, 6, 7, 8, 9] else draw_line(False)
+        draw_line() if digtal in [0, 1, 2, 3, 4, 7, 8, 9] else draw_line(False)
+    else:
+        if digtal == "-":
+            draw_char("年")
+        if digtal == "=":
+            draw_char("月")
+        if digtal == " ":
+            draw_char("日")
+        if digtal == "+":
+            draw_char("时")
+        if digtal == "#":
+            draw_char("分")
+        if digtal == "*":
+            draw_char("秒")
+
+    t.setheading(0)
+    t.forward(20)
+
+
+def time_to_digtal(*args):
+    list1 = []
+    for i in args:
+        if i in ["-", "=", " ", "+", "#", "*"]:
+            list1.append(i)
+        else:
+            list1.append(eval(i))
+    return list1
+
+
+def main():
+    t.setup(1400, 900, 0, 0)
+    t.penup()
+    t.backward(600)
+    t.pensize(5)
+    t.pencolor("pink")
+    t.speed(0)
+    list1 = time_to_digtal(*time.strftime("%Y-%m=%d %H+%M#%S*"))
+    for i in list1:
+        draw_digal(i)
+    t.hideturtle()
+    t.done()
+
+
+main()
