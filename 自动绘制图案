@@ -1,0 +1,36 @@
+import turtle as t
+'''
+以下是文档内容：
+300,1,144,0,0,0
+300,1,144,144,155,166
+300,1,144,200,200,200
+300,1,144,0,0,0
+300,1,144,0,0,0
+'''
+
+def read_text():
+    t = open("/Users/IvanLiao/Desktop/1.txt", 'r')
+    return t.readlines()
+    f.close()
+
+def draw(original_data):
+    for data in original_data:
+        data = data.replace("\n", "").split(",")
+        data = list(map(eval, data))
+        t.fd(data[0])
+        t.right(data[2]) if data[1] == 1 else t.left(data[2])
+        t.pencolor(*tuple(data[-3:]))
+
+
+def main():
+    t.title("自动绘制图案")
+    t.setup(1000, 900, 0, 0)
+    t.colormode(255)
+    t.pensize(10)
+    t.pendown()
+    draw(read_text())
+    t.hideturtle()
+    t.done()
+
+
+main()
