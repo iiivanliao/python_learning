@@ -1,0 +1,47 @@
+"""
+系统随机在一定数字范围（如0-1024），确定一个数字。
+系统确定一个猜测的最大次数，如果超过次数，提醒：超过次数了，游戏结束。如果没超过，可以继续。
+用户输入一个数，系统判断距离目标数字，是正确，是大了，还是小了。
+如果正确，提示猜对了
+如果错了，提示大了小了，然后让用户继续猜
+
+"""
+
+from random import randint
+import math
+
+
+max_num = int(input("Pls input the max num you want to play for this game:"))
+
+
+def guess_num_game(max_num):
+    guess_num = 0
+    max_by_num = math.log2(max_num)
+    print("You only have {} chances to guess.".format(int(str(max_by_num)[:str(max_by_num).index(".")])))
+    target_num = randint(1, max_num)
+    guessed = []
+    while guess_num < max_by_num:
+        guess_input = input("Pls input a number between 0 - {}:".format(max_num))
+        guess_input = int(guess_input)
+        guessed.append(guess_input)
+        if guess_input > target_num:
+            print("The target number is less.")
+            print("You have {} chances left.".format(max_by_num - 1))
+        elif guess_input < target_num:
+            print("The target number is more.")
+            print("You have {} chances left.".format(max_by_num - 1))
+        else:
+            print("You are right.")
+            print("The number you have guessed is: {}".format(guess_num + 1))
+            print(*guessed)
+            break
+        guess_num += 1
+        if guess_num == max_num:
+            print("You have used all chances./nGame Over.")
+            print(*guessed)
+            # print("The numbers you have guessed are {}".format(*guessed))
+            break
+
+
+if __name__ == "__main__":
+    guess_num_game(max_num)
