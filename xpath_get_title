@@ -1,0 +1,15 @@
+import lxml.html
+import requests
+
+# html = requests.get(r'https://tieba.baidu.com/f?kw=%E5%91%A8%E6%9D%B0%E4%BC%A6&ie=utf-8').content.decode()
+with open('test.txt', 'r', encoding='utf-8') as f:
+    html = f.read()
+
+selector = lxml.html.fromstring(html)
+info_first = selector.xpath('//*[@class=" j_thread_list clearfix"]')
+print(info_first)
+list1 = []
+for i in info_first:
+    info = i.xpath('div/div[2]/div[1]/div[1]/a/text()')
+    list1.append(info[0])
+print(list1)
