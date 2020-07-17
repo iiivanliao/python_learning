@@ -1,0 +1,64 @@
+"""
+* 提取目录页html代码，
+* 创建一个文件夹，名字是这个小说的名字。
+* 获得所有章节的url成一个list，把章节名形成另一个list（这两个list要对应）；抓取html中的小说名，作为本地该小说的文件夹名。
+* 用5个线程抓取每个章节的html中的小说内容。
+* 把抓取的每章小说内容存为名字是章节名的txt文件。
+"""
+# Still be under coding.
+
+from multiprocessing.dummy import Pool
+import requests
+import re
+import os
+
+
+class GetNovelLoacal(object):
+    def __init__(self, novel):
+        self.novel = novel
+
+    def get_novel_menu_content(self):
+        html = requests.get(self.novel).content.decode("GBK")
+        pattern_capture_first = r'<table cellspacing="1"(.*?)</tbody>'
+        pattern_capture = r'><a href="(.*?).html">(.*?)</a></td>'
+        pattern_title = r'<h1><strong><font color="#dc143c">(.*?) </font></strong></h1></td>'
+        novel_title = re.search(pattern_title, html)
+        result_capture_first = re.findall(pattern_capture_first, html, re.S)
+        result_capture = re.findall(pattern_capture, result_capture_first[0], re.S)  # [('131783', '第一章'), ...]
+        result_chapter_url = [i[0] for i in result_capture]  # ['131783', ....]
+        result_chapter_name = [i[1] for i in result_capture]  # ['第一章', ....]
+        return novel_title[1], result_chapter_url, result_chapter_name
+
+    def mkdir_for_novel(self):
+        novel_local_url = os.path.join(r"/Users/IvanLiao/Desktop", self.get_novel_menu_content()[0])
+        if os.path.exists(novel_local_url) == False:
+            os.mkdir(novel_local_url)
+        return novel_local_url
+
+    def get_chapter_content(self, url):
+        html = requests.get(url).content.decode("GBK")
+        pattern_chapter_content = r"<p>(.*?)</p>"
+        result_capture_content = re.findall(pattern_chapter_content, html, re.S)
+        refined_chapter_content = result_capture_content[0].replace("<br />", " ")
+        return refined_chapter_content
+
+    def chapter_url_list(self):
+        chapter_url = []
+        for i in self.get_novel_menu_content()[1]:
+            url = os.path.join(r"https://www.kanunu8.com/book3/6879/", (i + ".html"))
+            chapter_url.append(url)
+        return chapter_url
+
+    def save_novel_local(self):
+        self.mkdir_for_novel()
+        pool = Pool()
+        final_content = pool.map(self.get_chapter_content, self.chapter_url_list())
+        for x, y in zip(self.get_novel_menu_content()[2], final_content):
+            novel_content_txt_path = os.path.join(self.mkdir_for_novel(), x[1])
+            with open(novel_content_txt_path, "w", encoding="utf-8") as f:
+                f.write(y)
+
+
+novel_url = r"https://www.kanunu8.com/book3/6879/"
+novel = GetNovelLoacal(novel_url)
+novel.save_novel_local()
