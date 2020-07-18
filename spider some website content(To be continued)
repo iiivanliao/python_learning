@@ -5,7 +5,7 @@ import csv
 
 #Get the html from the website, @string
 # html = requests.get('https://search.damai.cn/search.htm').content.decode()
-with open("test2.html", "r", encoding="utf--8") as f:
+with open("ininin.html", "r", encoding="utf--8") as f:
     html = f.read()
 
 #xpath the biggest part(first menu  code block) of target content like 'mingpian', @HtmlElement
@@ -17,13 +17,17 @@ final_write_products = []
 for i in menu_item_block:
     menu_name_first = i.xpath('a/text()')
     menu_name = menu_name_first[0].split()[0]   #xpath out the name of the first menu and refine it, @string
-    menu_catalogue_block = selector.xpath('div/div/dl') #xpath out the second menu part, @HtmlElement
+    menu_catalogue_block = i.xpath('div/div/dl') #xpath out the second menu part, @HtmlElement
     for catalogue in menu_catalogue_block:
         catalogue_name = catalogue.xpath('dt/a/text()')[0] #xpath out the name of the second menu, @string
         product_name_list = catalogue.xpath('dd/a/text()')  #xpath out the third(final) menu(product name), @HtmlElement
-        for x in product_name_list:
-            result_dict = {"产品类型": menu_name + catalogue_name,
-                        "产品名称": x}
+        if product_name_list:   #make a list with dicts which are the products info we want
+            for x in product_name_list:
+                result_dict = {"产品类型": menu_name + catalogue_name,
+                            "产品名称": x if x else ' '}
+                final_write_products.append(result_dict)
+        else:
+            result_dict = {"产品类型": menu_name + catalogue_name, "产品名称": ''}
             final_write_products.append(result_dict)
 
 #write all the content into a new .csv file.
