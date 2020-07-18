@@ -1,0 +1,33 @@
+import requests
+import lxml.html
+import csv
+
+
+#Get the html from the website, @string
+# html = requests.get('https://search.damai.cn/search.htm').content.decode()
+with open("test2.html", "r", encoding="utf--8") as f:
+    html = f.read()
+
+#xpath the biggest part(first menu  code block) of target content like 'mingpian', @HtmlElement
+selector = lxml.html.fromstring(html)
+menu_item_block = selector.xpath('//*[@id="template-nav_category_list-view"]/li')
+
+#go on xpathing the second menu code block and the thrid code block(product name)
+final_write_products = []
+for i in menu_item_block:
+    menu_name_first = i.xpath('a/text()')
+    menu_name = menu_name_first[0].split()[0]   #xpath out the name of the first menu and refine it, @string
+    menu_catalogue_block = selector.xpath('div/div/dl') #xpath out the second menu part, @HtmlElement
+    for catalogue in menu_catalogue_block:
+        catalogue_name = catalogue.xpath('dt/a/text()')[0] #xpath out the name of the second menu, @string
+        product_name_list = catalogue.xpath('dd/a/text()')  #xpath out the third(final) menu(product name), @HtmlElement
+        for x in product_name_list:
+            result_dict = {"产品类型": menu_name + catalogue_name,
+                        "产品名称": x}
+            final_write_products.append(result_dict)
+
+#write all the content into a new .csv file.
+with open('test.csv', 'w', encoding='utf-8') as f:
+    writer = csv.DictWriter(f, fieldnames=['产品类型', '产品名称'])
+    writer.writeheader()
+    writer.writerows(final_write_products)
