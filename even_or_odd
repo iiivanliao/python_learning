@@ -1,0 +1,15 @@
+def even_odd(times):
+    a = 1
+    while a <= times:
+        number = input("Pls input a number and we will tell you if it's even or odd.")
+        int_number = int(number)
+        def even_or_odd(x):
+            if x % 2 == 0:
+                print("even")
+            else:
+                print("odd")
+        
+        even_or_odd(int_number)
+        a += 1
+    
+even_odd(3)
