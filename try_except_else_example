@@ -1,0 +1,9 @@
+a = int(input("Pls input a number."))
+b = int(input("Pls input a number."))
+try:
+    result = a / b
+    print(result)
+except ZeroDivisionError:
+    print("b cannot be zero.")
+else:
+    print("You are great.")
