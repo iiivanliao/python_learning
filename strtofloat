@@ -1,0 +1,9 @@
+def strtofloat(a):
+    try:
+        return float(a)
+    except ValueError:
+        print("Pls input a float str")
+    
+# print(strtofloat('123.123123'))
+# print(strtofloat('990'))
+print(strtofloat('adfajdf'))
