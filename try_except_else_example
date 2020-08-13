@@ -3,7 +3,7 @@ b = int(input("Pls input a number."))
 try:
     result = a / b
     print(result)
-except ZeroDivisionError:
+except (ZeroDivisionError, ValueError):
     print("b cannot be zero.")
 else:
     print("You are great.")
