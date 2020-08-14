@@ -1,0 +1,16 @@
+'''
+This is the target:
+对字符串"Where now? Who now? When now? "调用一个方法，返回如下述的列表["Where now? ", "Who now? ", "When now? "]。
+'''
+import re
+
+# Method 1
+a = "Where now? Who now? When now? "
+result = re.findall(r'[^\?]+\?+\s', a)
+print(result)
+
+# Method 2
+a = "Where now? Who now? When now? "
+result = a.split("? ")[:-1]
+result = [x + '? ' for x in result]
+print(result)
