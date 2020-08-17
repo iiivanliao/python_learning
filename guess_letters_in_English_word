@@ -1,0 +1,75 @@
+'''
+1、计算机挑选一个英文单词。
+2、用户输入一个字母.
+3、如果该字母和单词中的某个单词一致，则答对了，对应的_变为改字母。如果答错了，则出现上吊小人的身体一部分，直到所有小人身体出现，用户如果还没猜出所有字母，则游戏结束。或者用户用完所有猜测的机会，还没猜出，游戏也结束。
+'''
+# 导入该第三方库，随机到付一个英文单词
+import randword
+
+
+#定义个函数，可以产生一个至少6个字母，至多10个字幕的英文单词，返回字符串格式。
+def generate_randomword():
+    the_word = randword.rand_word.word(1, min_word_len=6, max_word_len=10)
+    return the_word[0]
+
+#定义一个生成器，每次出现上吊小人的一部分，方法是：不断替换对应位置的空格字符串为对应的小人身体的字符串（\,/,|,O 这四个中的某个），最终呈现出小人上吊的全部画面。参数body是绞刑架的原始状态的变量。
+def show_body(body):
+    list1 = [x for x in body]
+    for i in [70,104,137,138,139,173,206,208]:
+        if i == 104:
+            list1[i] = "O"
+        elif i == 137 or i == 208:
+            list1[i] = "\\"
+        elif i == 139 or i == 206:
+            list1[i] = "/"
+        else:
+            list1[i] = "|"
+        body = "".join(list1)
+        yield body
+
+#定义主函数，参数time-用户可以猜测的最大次数
+def guess_letter(time):
+    the_word = generate_randomword() #调用之前定义的产生随机英文单词的函数，产生一个英文单词
+    word_show = '_' * len(the_word) #word_show 变量是用户猜对后，出现对应位置的字母的展示，默认是所有字母的位置都是_下划线。
+    body = r'''
+                    ================
+                    |            
+                    |            
+                    |             
+                    |            
+                    |             
+                    |
+                =====================
+                '''  #用一个变量，存绞刑架的原始样子，这时还没有小人，未来会在调用show_body()生成器时，不断出现小人。
+    print("The below is the real face of the word and the punished image you may face:")
+    print(' '*20 + word_show + '\n' + body) # 在用户猜测之前，给用户展示一下word_show的初始状态，全部是_。同事展示一下绞刑架的原始样子。
+    body_renewed = show_body(body) #用show_body生成器，生成一个生成器，赋值给body_renewed变量
+    body_renewed2 = show_body(body)
+    end_body = list(body_renewed2)[-1]#用show_body生成器，生成一个生成器，赋值给body_renewed2变量，最终得到end_body这个变量，为的是最终在游戏未成功时展示小人上吊的画面。（为什么不用body_renewed呢？因为在这用了list（body_renewed）的话，下面的__next__（）方法就会出现StopIteration错误。）
+    for i in range(time): #开始按照用户定义的最大次数，循环要求用户输入猜的字母。
+        input_word = input("Pls guess a letter in the word. (The letter will be shown if you're right)")
+        if input_word in the_word: #如果用户输入的字母在单词中，则。。。
+            word_show_list = [x for x in word_show] 
+            word_show_list[the_word.index(input_word)] = input_word
+            word_show = "".join(word_show_list) #通过以上三步的字符串变列表的方式，可以精准的把word_show变量中的猜中的部分替换到_为猜中的单词。
+            the_word_list = [x for x in the_word]
+            the_word_list[the_word.index(input_word)] = "_"
+            the_word = "".join(the_word_list)#通过以上三步的字符串变列表的方式，把the_word单词中才出来的字母替换为_下划线，便于下次用户猜测时，在剩下的字母中匹配是否有猜对的。（若单词中有多个a字母，这样可以让用户把所有的a都猜出来，而不是猜一次a，就把所有字母中的a猜完。）
+            print(' '*20 + word_show + '\n') #如果猜对了，最后展示一下word_show变量，这时的word_show已经是在对应位置替换成猜对的字母了。
+        else: #如果这次没有才对，则。。。。
+            print("No this letter in the word left.") #提示用户余下的未猜测的位置，没有该单词哦
+            try:
+                print(' '*20 + word_show + '\n' + body_renewed.__next__()) # 猜错了，要出现对应小人的惩罚画面，会在绞刑架的基础上加一条线。（通过body_renewed生成器的__next__()方法产生加了一条线的绞刑架）
+            except StopIteration: #绞刑架加了8条线后就完整的出现了小人上吊的画面，到此游戏就要结束了。结束前要告知用户详情，并展示出最后小人上吊的画面，如以下两步。然后用break退出循环。
+                print("Sorry, You have used all chances and the little guy has passed away.")
+                print(end_body)
+                break
+        if the_word == "_" * len(the_word): #如果用the_word变量全部变为_下划线，作为用户猜测完所有的单词的标志。如果出现此情况，表示用户成功了。
+            print("You are great!" + "\n" + "Work Done!") #打印出来提示用户成功了。
+            break
+    else:
+        print("Sorry, you only have {} chances, and It's all used, and the little guy has passed away.".format(time))#如果用户用完了所有的最大猜测次数，同时上吊小人的8条线也没画完（猜错8次），那么也表示用户失败了，因为用完了所有猜测次数，for循环在没有break的时候最后总是会执行else中的代码，这一行代码就是，它提醒用户用完了所有的机会。
+        print(end_body) #最后展示一下小人上吊的画面，暗示用户Game Over了。
+
+
+guess_letter(10) #启动程序，设置最多猜测10次。
