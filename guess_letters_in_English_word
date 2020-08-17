@@ -7,28 +7,28 @@
 import randword
 
 
-#定义个函数，可以产生一个至少6个字母，至多10个字幕的英文单词，返回字符串格式。
-def generate_randomword():
-    the_word = randword.rand_word.word(1, min_word_len=6, max_word_len=10)
-    return the_word[0]
-
-#定义一个生成器，每次出现上吊小人的一部分，方法是：不断替换对应位置的空格字符串为对应的小人身体的字符串（\,/,|,O 这四个中的某个），最终呈现出小人上吊的全部画面。参数body是绞刑架的原始状态的变量。
-def show_body(body):
-    list1 = [x for x in body]
-    for i in [70,104,137,138,139,173,206,208]:
-        if i == 104:
-            list1[i] = "O"
-        elif i == 137 or i == 208:
-            list1[i] = "\\"
-        elif i == 139 or i == 206:
-            list1[i] = "/"
-        else:
-            list1[i] = "|"
-        body = "".join(list1)
-        yield body
-
 #定义主函数，参数time-用户可以猜测的最大次数
 def guess_letter(time):
+    #定义个函数，可以产生一个至少6个字母，至多10个字幕的英文单词，返回字符串格式。
+    def generate_randomword():
+        the_word = randword.rand_word.word(1, min_word_len=6, max_word_len=10)
+        return the_word[0]
+
+    #定义一个生成器，每次出现上吊小人的一部分，方法是：不断替换对应位置的空格字符串为对应的小人身体的字符串（\,/,|,O 这四个中的某个），最终呈现出小人上吊的全部画面。参数body是绞刑架的原始状态的变量。
+    def show_body(body):
+        list1 = [x for x in body]
+        for i in [70,104,137,138,139,173,206,208]:
+            if i == 104:
+                list1[i] = "O"
+            elif i == 137 or i == 208:
+                list1[i] = "\\"
+            elif i == 139 or i == 206:
+                list1[i] = "/"
+            else:
+                list1[i] = "|"
+            body = "".join(list1)
+            yield body
+            
     the_word = generate_randomword() #调用之前定义的产生随机英文单词的函数，产生一个英文单词
     word_show = '_' * len(the_word) #word_show 变量是用户猜对后，出现对应位置的字母的展示，默认是所有字母的位置都是_下划线。
     body = r'''
