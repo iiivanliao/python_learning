@@ -1,0 +1,41 @@
+class Guess_Game(object):
+    guess_history = []
+    def __init__(self, base_num, player_name):
+        self.player_name = player_name
+        if 0 < base_num < 101:
+            self.base_num = base_num
+        else:
+            print('Pls assign this class with an int between 1 and 100.')
+
+    def _guess(self, num):
+        if num > self.base_num:
+            print('No, it is smaller.')
+            return False
+        elif num < self.base_num:
+            print('No, it is larger.')
+            return False
+        else:
+            print('Bingo')
+            return True
+
+    def _save_guess_history(self, guess_num):
+        if guess_num.isdigit():
+            Guess_Game.guess_history.append(eval(guess_num))
+        else:
+            Guess_Game.guess_history.append(guess_num)
+
+    def run(self): 
+        while True:
+            guess_num = input('Pls guess a number between 1, and 100:  ')
+            self._save_guess_history(guess_num)
+            if guess_num.isdigit():
+                if self._guess(eval(guess_num)):
+                    print(self.player_name, Guess_Game.guess_history)
+                    break
+            else:
+                print('Pls input an int other than other types.')
+
+
+if __name__ == "__main__":
+    first_guess_game = Guess_Game(90, 'Ivan')
+    first_guess_game.run()
